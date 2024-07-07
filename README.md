@@ -57,5 +57,9 @@
 
 #### Запустить приложение можно из редактора кода / среды разработки 
 
-https://github.com/NoviMar/CRUD-PHP-AngularJS/assets/141076996/9d3ff1d7-19ad-4e5d-b387-a80a303428e0
+
+
+https://github.com/NoviMar/CRUD-PHP-AngularJS/assets/141076996/4dfe43dd-e40b-47ab-94a2-c7e3eb899a56
+
+
 
