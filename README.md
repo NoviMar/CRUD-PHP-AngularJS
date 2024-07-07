@@ -29,7 +29,6 @@
 
 ## Требования
 
-- Веб-сервер (Apache или Nginx)
 - PHP
 - MySQL Server
 - MySQL Workbench или phpMyAdmin
