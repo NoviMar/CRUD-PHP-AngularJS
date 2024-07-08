@@ -59,7 +59,5 @@
 
 
 
-https://github.com/NoviMar/CRUD-PHP-AngularJS/assets/141076996/4dfe43dd-e40b-47ab-94a2-c7e3eb899a56
-
-
+https://github.com/NoviMar/CRUD-PHP-AngularJS/assets/141076996/b64fc705-177c-4e88-87e6-e9b904a7c6d3
 
