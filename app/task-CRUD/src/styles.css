@@ -1,0 +1,101 @@
+:root {
+  --background-color: #2e2e2e;
+  --container-bg-color: #3a3a3a;
+  --text-color: #f0f0f0;
+  --form-control-bg-color: #4a4a4a;
+  --border-color: #666;
+  --btn-info-bg-color: #419eed;
+  --btn-danger-bg-color: #e57373;
+  --btn-hover-bg-color: #3c92dd;
+  --btn-hover-danger-bg-color: #ef5350;
+  --loader-border-color: #f0f0f0;
+  --loader-border-top-color: #2d6da2;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  margin-top: 50px;
+  background-color: var(--container-bg-color);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h3, label {
+  color: var(--text-color);
+}
+
+h3 {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+}
+
+.form-control, .table td {
+  margin-bottom: 15px;
+  border-radius: 4px;
+  background-color: var(--form-control-bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.btn {
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  color: var(--text-color);
+}
+
+.btn-info {
+  background-color: var(--btn-info-bg-color);
+  border-color: var(--btn-info-bg-color);
+}
+
+.btn-info:hover {
+  background-color: var(--btn-hover-bg-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-danger {
+  background-color: var(--btn-danger-bg-color);
+  border-color: var(--btn-danger-bg-color);
+}
+
+.btn-danger:hover {
+  background-color: var(--btn-hover-danger-bg-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.table {
+  margin-top: 20px;
+  background-color: var(--container-bg-color);
+}
+
+.table th {
+  background-color: #555;
+  color: var(--text-color);
+}
+
+.loader {
+  border: 4px solid var(--loader-border-color);
+  border-radius: 50%;
+  border-top: 4px solid var(--loader-border-top-color);
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

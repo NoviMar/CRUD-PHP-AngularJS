@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AngularJS CRUD with PHP Mysql</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap.min.js"></script>
+</head>
+<body>
+<br /><br />
+<div class="container" style="width:600px;">
+  <h3 align="center">Web application for student management</h3>
+  <h3 align="center">(CRUD application)</h3>
+  <div ng-app="angularcrud" ng-controller="usercontroller" ng-init="displayData()">
+    <form name="userForm" novalidate>
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" name="firstName" ng-model="firstName" class="form-control" ng-required="true" ng-minlength="2" />
+        <span style="color:#c80000" ng-show="userForm.firstName.$dirty && userForm.firstName.$invalid">
+                        <span ng-show="userForm.firstName.$error.required">First Name is required.</span>
+                        <span ng-show="userForm.firstName.$error.minlength">First Name must be at least 2 characters long.</span>
+                    </span>
+      </div>
+      <div class="form-group">
+        <label for="LastName">Last Name</label>
+        <input type="text" id="LastName" name="LastName" ng-model="LastName" class="form-control" ng-required="true" ng-minlength="2" />
+        <span style="color:#c80000" ng-show="userForm.LastName.$dirty && userForm.LastName.$invalid">
+                        <span ng-show="userForm.LastName.$error.required">Last Name is required.</span>
+                        <span ng-show="userForm.LastName.$error.minlength">Last Name must be at least 2 characters long.</span>
+                    </span>
+      </div>
+      <div class="form-group">
+        <label for="Age">Age</label>
+        <input type="number" id="Age" name="Age" ng-model="Age" class="form-control" ng-required="true" ng-min="18" ng-max="120" ng-blur="checkAgeValidity()" ng-class="{'invalid-input': ageInvalid}" />
+        <span style="color:red" ng-show="ageInvalid">
+        <span ng-show="userForm.Age.$error.required">Age is required.</span>
+        <span ng-show="userForm.Age.$error.min">Age must be at least 18.</span>
+        <span ng-show="userForm.Age.$error.max">Age must be less than 120.</span>
+    </span>
+      </div>
+      <div class="form-group">
+        <label for="course">Course</label>
+        <input type="number" id="course" name="course" ng-model="course" class="form-control" ng-required="true" ng-min="1" ng-max="6" />
+        <span style="color:#c80000" ng-show="userForm.course.$dirty && userForm.course.$invalid">
+                        <span ng-show="userForm.course.$error.required">Course is required.</span>
+                        <span ng-show="userForm.course.$error.min">Course must be at least 1.</span>
+                        <span ng-show="userForm.course.$error.max">Course must be at most 6.</span>
+                    </span>
+      </div>
+      <input type="hidden" name="id" ng-model="id" />
+      <button type="submit" class="btn btn-info" ng-click="insertData()" ng-disabled="loading">{{btnName}}</button>
+      <div ng-show="loading" class="loader"></div>
+    </form>
+    <br /><br />
+    <table id="dataTable" class="table table-bordered table-dark">
+      <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+        <th>Course</th>
+        <th>Update</th>
+        <th>Delete</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="x in names">
+        <td>{{x.firstName}}</td>
+        <td>{{x.LastName}}</td>
+        <td>{{x.Age}}</td>
+        <td>{{x.course}}</td>
+        <td><button ng-click="updateData(x.id, x.firstName, x.LastName, x.Age, x.course)" class="btn btn-info btn-xs">Update</button></td>
+        <td><button ng-click="deleteData(x.id)" class="btn btn-danger btn-xs">Delete</button></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+  var app = angular.module("angularcrud", []);
+
+  app.service('ApiService', function($http) {
+    this.insertOrUpdate = function(data) {
+      return $http.post("api/insert_update.php", data);
+    };
+    this.getList = function() {
+      return $http.get("api/list.php");
+    };
+    this.delete = function(id) {
+      return $http.post("api/delete.php", { 'id': id });
+    };
+  });
+
+  app.controller("usercontroller", function($scope, ApiService) {
+    $scope.btnName = "ADD";
+    $scope.id = 0;
+    $scope.ageInvalid = false;
+
+    $scope.checkAgeValidity = function() {
+      $scope.ageInvalid = $scope.userForm.Age.$invalid && $scope.userForm.Age.$dirty;
+    };
+
+    $scope.insertData = function() {
+      if ($scope.userForm.$valid) {
+        ApiService.insertOrUpdate({
+          'firstName': $scope.firstName,
+          'LastName': $scope.LastName,
+          'Age': $scope.Age,
+          'course': $scope.course,
+          'id': $scope.id,
+          'btnName': $scope.btnName
+        }).then(function(response) {
+          alert(response.data.message);
+          $scope.resetForm();
+          $scope.displayData();
+        });
+      } else {
+        alert("Please fill out the form correctly.");
+      }
+    };
+
+    $scope.displayData = function() {
+      ApiService.getList().then(function(response) {
+        $scope.names = response.data;
+        setTimeout(function() {
+          $('#dataTable').DataTable();
+        }, 0);
+      });
+    };
+
+    $scope.updateData = function(id, firstName, LastName, Age, course) {
+      $scope.id = id;
+      $scope.firstName = firstName;
+      $scope.LastName = LastName;
+      $scope.Age = Age;
+      $scope.course = course;
+      $scope.btnName = "Update";
+    };
+
+    $scope.deleteData = function(id) {
+      if (confirm("Are you sure you want to delete this data?")) {
+        ApiService.delete(id).then(function(response) {
+          alert(response.data.message);
+          $scope.displayData();
+        });
+      }
+    };
+
+    $scope.resetForm = function() {
+      $scope.firstName = null;
+      $scope.LastName = null;
+      $scope.Age = null;
+      $scope.course = null;
+      $scope.id = 0;
+      $scope.btnName = "ADD";
+      $scope.userForm.$setPristine();
+      $scope.userForm.$setUntouched();
+      $scope.ageInvalid = false;
+    };
+
+    $scope.displayData();
+  });
+</script>
+</body>
+</html>
